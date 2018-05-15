@@ -1,0 +1,60 @@
+
+    <div class="facebook-api">
+        <div class="width-700 p-lr-30">
+            <form class="m-t-30 m-btm-15 text-0" method="post">
+
+                <div class="form-group">
+                    <label>Access Token</label>
+                    <input type="text" name="form[txtToken]" class="form-control" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label>ID Post</label>
+                    <input type="text" name="form[txtId_post]" class="form-control" placeholder="365109010360289_783788151825704">
+                </div>
+
+                <div class="form-group">
+                    <label>Reaction</label>
+                    <select name="form[slcReaction]" class="form-control custom-select">
+                        <option value="comments">Comment</option>
+                        <option value="likes">Like</option>
+                        <option value="reactions">Reaction</option>
+                    </select>
+                </div>
+
+                <div class="right-block link-actions text-14 dis-inblock ver-top">
+                    <button type="submit" class="btn btn-default dis-inblock ver-top">Load Comments</button>
+                </div>
+            </form>
+            <div class="panel-default panel">
+                <?php if(isset($result[0]) && !empty($result[0])){?>
+                <div class="panel-body">
+                    <?php foreach ($result as $value){
+                        foreach ($value as $val){
+                        ?>
+                    <div class="user text-0">
+                        <a href="https://fb.com/<?php echo ((!isset($val['type']))?$val['from']['id']:$val['id'])?>" class="dis-inblock m-r-10 avatar-link">
+                            <div class="avatar dis-inblock">
+                                <img src="//graph.facebook.com/<?php echo ((!isset($val['type']))?$val['from']['id']:$val['id']).'/picture'?>" class="img-circle" width="32" height="32">
+                            </div>
+                        </a>
+
+                        <div class="question dis-inblock bg-white p-lr-15 p-tb-5 text-14 ver-top">
+                            <a href="#" class="dis-inblock m-r-5">
+                                <span class="full-name text-w600"><?php echo ((!isset($val['type']))?$val['from']['name']:$val['name'])?></span>
+                            </a>
+
+                            <span class="text"><?php echo ((!isset($val['type']))?$val['message']:'')?></span>
+
+                        </div>
+
+                    </div>
+                    <?php }}?>
+
+                </div>
+                <?php }?>
+            </div>
+
+        </div>
+    </div>
+

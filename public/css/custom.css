@@ -1,0 +1,9 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+select.form-control.custom-select {
+    height: 25% !important;
+    width: 22%;
+}
