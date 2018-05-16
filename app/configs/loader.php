@@ -8,7 +8,8 @@ $loader->registerNamespaces([
 ]);
 
 $loader->registerFiles([
-    APP_PATH . '/library/MongoDB/functions.php'
+    APP_PATH . '/library/MongoDB/functions.php',
+    VENDOR_PATH.'/autoload.php'
 
 ]);
 $loader->register();

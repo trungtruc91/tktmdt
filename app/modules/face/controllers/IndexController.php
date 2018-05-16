@@ -12,6 +12,12 @@ class IndexController extends Controller
     public function initialize(){
         $this->_client = new WebClient("https://google.com");
         $this->_request=new Request();
+//        if(!isset($_SESSION['userData'])){
+//            $this->response->redirect('http://tructt.laptrinhaz.com/face/login/index');
+//        }
+    }
+    public function indexAction(){
+
     }
     public function postAction()
     {
