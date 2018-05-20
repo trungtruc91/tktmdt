@@ -11,6 +11,7 @@ class LoginController extends Controller
     public $FB;
     public $area = 'facebook';
     public function initialize(){
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
 
         //thiết lập facebook
         $arr = [
@@ -19,6 +20,7 @@ class LoginController extends Controller
             "default_graph_version" => 'v2.12'
         ];
         $this->FB = new face($arr);
+
 
     }
     public function indexAction(){
@@ -33,16 +35,15 @@ class LoginController extends Controller
         $face = $this->FB;
         $helper = $face->getRedirectLoginHelper();
         $_SESSION['FBRLH_state']=$_GET['state'];
-
         try {
-            $accessToken = $helper->getAccessToken("https://tools.vdevpro.com/admincc/facebook/facecallback");
-        } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+            $accessToken = $helper->getAccessToken("http://tructt.laptrinhaz.com/face/login/facecallback");
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
             echo "Reponse Exception:" . $e->getMessage();
-        } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
             echo "SDK Exception" . $e->getMessage();
         }
         if (!$accessToken) {
-            $this->response->redirect("/admincc/facebook/index");
+            $this->response->redirect("/face/index/index");
         }
         $oAuth2Client = $this->FB->getOAuth2Client();
 
@@ -56,6 +57,53 @@ class LoginController extends Controller
         $_SESSION['access_token'] = (string)$accessToken;
 
         $this->response->redirect("/face/index/index");
+    }
+    public function conversationAction(){
+        //get info post of user
+        $post='/871090909744554/conversations';
+        $accessToken='EAAcRwFfKtnMBAGPwRmg43ZCkBl5QevQoFkkhfebZCpCJDJOYgeIWkZAkgdUJ4x4PAfvEa09F5nxvUkZAH9LoTCuBicOb9ghpSJXXDRLTlyiO4nxHPO2vDXAtIxmIImtPdLbpfxLBtJtozR3ZArejUMek9hIZB0cr3TgDWkkLFBuga9a4rfKZBrWc5rwYnxWagZBfoLt5auCDkQZDZD';
+
+        try {
+            // Returns a `Facebook\FacebookResponse` object
+            $responsePost = $this->FB->get(
+                $post,
+                $accessToken
+            );
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+
+        $total_post = [];
+        $posts_response = $responsePost->getGraphEdge();
+        echo "<pre>";
+        print_r($posts_response);
+        echo "</pre>";
+        if ($this->FB->next($posts_response)) {
+            $dem = 0;
+            while ($posts_paging = $this->FB->next($posts_response)) {
+                $response_array = $posts_response->asArray();
+                if ($dem == 0) {
+                    $total_post = array_merge($total_post, $response_array);
+                }
+                $posts_response = $posts_paging;
+                $response_array = $posts_response->asArray();
+                $total_post = array_merge($total_post, $response_array);
+                $dem++;
+
+            }
+
+        } else {
+            $posts_response = $responsePost->getGraphEdge()->asArray();
+            $total_post = array_merge($total_post, $posts_response);
+        }
+        echo "<pre>";
+        print_r($total_post);
+        echo "</pre>";die;
+        return $total_post;
     }
 
 }

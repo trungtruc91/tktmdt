@@ -1,0 +1,96 @@
+<div class="list-contact">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title" style="text-align: center">List contact</h3>
+
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0">
+            <ul class="products-list product-list-in-card pl-2 pr-2">
+                <?php foreach ($result as $value) { ?>
+                    <li class="item">
+                        <div class="product-img">
+                            <img src="<?php echo '//graph.facebook.com/' . $value['senders'][0]['id'] . '/picture' ?>"
+                                 alt="Product Image" class="img-size-50">
+                        </div>
+                        <div class="product-info">
+                            <a href="#" class="product-title"
+                               data-convId="<?php echo $value['id'] ?>"><?php echo $value['senders'][0]['name'] ?></a>
+                        </div>
+                    </li>
+                <?php } ?>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<div class="conversation">
+    <div class="chat">
+        <!-- DIRECT CHAT -->
+        <div class="card direct-chat direct-chat-primary">
+            <div class="card-header">
+                <h3 class="card-title" style="text-align: center">Chat</h3>
+
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <!-- Conversations are loaded here -->
+                <div class="direct-chat-messages">
+
+                </div>
+                <!--/.direct-chat-messages-->
+
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <form action="#" method="post">
+                    <div class="input-group">
+                        <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                        <span class="input-group-append">
+                    <button type="button" class="btn btn-primary">Send</button>
+                  </span>
+                    </div>
+                </form>
+            </div>
+            <!-- /.card-footer-->
+        </div>
+        <!--/.direct-chat -->
+    </div>
+    <div class="order">
+        <!-- general form elements disabled -->
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title" style="text-align: center">Order</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+                <div class="postId"><?php echo "<b>POST ID:</b>" . ((!empty($result)) ? $result : '') ?></div>
+                <form role="form" method="post">
+
+                    <div class="form-group">
+                        <label>Access Token</label>
+                        <input type="text" name="form[txtToken]" class="form-control" placeholder="Enter ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Caption</label>
+                        <input type="text" name="form[txtCaption]" class="form-control" placeholder="Enter ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Link Photo</label>
+                        <textarea class="form-control" name="form[txtLink]" rows="3"
+                                  placeholder="https://pictures/navas.jpg"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-success">Success</button>
+                </form>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+
+</div>
+
+
+
+
+

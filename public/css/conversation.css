@@ -1,0 +1,45 @@
+*{
+    padding:0px;
+    margin:0px;
+}
+
+
+
+img.img-size-50 {
+    border-radius: 50%;
+}
+
+.direct-chat-messages {
+    height: 100vh;
+    overflow:  unset;
+}
+
+.card {
+    height: 100vh;
+}
+
+.order {
+    width: 35%;
+    display: inherit;
+}
+
+.chat {
+    width: 62%;
+    display: inherit;
+}
+
+.conversation {
+    width: 75%;
+    display: inline-block;
+    height: 100vh;
+}
+
+.list-contact {
+    width: 22%;
+    display: inline-block;
+    height: 100vh;
+
+}
+.conversation.chat,.conversation.order,.list-contact{
+    height: 100%;
+}
