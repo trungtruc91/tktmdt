@@ -357,6 +357,7 @@ class Facebook
      */
     public function post($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
+
         return $this->sendRequest(
             'POST',
             $endpoint,

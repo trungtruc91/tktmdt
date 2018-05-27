@@ -5,6 +5,7 @@ namespace Zs\Face\Controllers;
 use Facebook\Facebook as face;
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
+use Zs\Face\Models\User;
 
 class LoginController extends Controller
 {
@@ -12,7 +13,7 @@ class LoginController extends Controller
     public $area = 'facebook';
     public function initialize(){
         date_default_timezone_set('Asia/Ho_Chi_Minh');
-
+        session_start();
         //thiết lập facebook
         $arr = [
             "app_id" => '1989842641270387',
@@ -31,7 +32,7 @@ class LoginController extends Controller
     }
     public function faceCallBackAction()
     {
-
+        $query=new User();
         $face = $this->FB;
         $helper = $face->getRedirectLoginHelper();
         $_SESSION['FBRLH_state']=$_GET['state'];
@@ -51,8 +52,12 @@ class LoginController extends Controller
             $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
         }
 
-        $response = $this->FB->get("/me?fields=id, first_name, last_name, email, picture.type(large)", $accessToken);
+        $response = $this->FB->get("/me?fields=id, first_name,age_range,address,friends, last_name, email, picture.type(large)", $accessToken);
         $userData = $response->getGraphNode()->asArray();
+
+        if(empty($query->getItemById($userData['id'])->toArray())) {
+            $query->save($userData);
+        }
         $_SESSION['userData'] = $userData;
         $_SESSION['access_token'] = (string)$accessToken;
 
@@ -61,8 +66,7 @@ class LoginController extends Controller
     public function conversationAction(){
         //get info post of user
         $post='/871090909744554/conversations';
-        $accessToken='EAAcRwFfKtnMBAGPwRmg43ZCkBl5QevQoFkkhfebZCpCJDJOYgeIWkZAkgdUJ4x4PAfvEa09F5nxvUkZAH9LoTCuBicOb9ghpSJXXDRLTlyiO4nxHPO2vDXAtIxmIImtPdLbpfxLBtJtozR3ZArejUMek9hIZB0cr3TgDWkkLFBuga9a4rfKZBrWc5rwYnxWagZBfoLt5auCDkQZDZD';
-
+        $accessToken='EAAcRwFfKtnMBAFEWgbZBGoi0AJdc09kh2s8iwr7ykgQP5ITUkgyMMjuM6GxBJLY3ZCfp2h8IUd3JuYycAu2erZBqsSoewlNhkuK6ZBSLjyVWPDeRV3hUB7JiuOSaN5307YTyajrZB3ioxImVj2kkmCZAJh7bcP2pURnge5OiCtSRrLMxngAG7LBm9lDQxKQ4beleEeDVyVrwZDZD';
         try {
             // Returns a `Facebook\FacebookResponse` object
             $responsePost = $this->FB->get(

@@ -3,6 +3,31 @@
     margin:0px;
 }
 
+input.form-control.size-product {
+    display: inline-block;
+    width: 32%;
+}
+
+.input-order {
+    overflow: auto;
+    max-height: 84vh;
+}
+
+.btn-success a {
+    color: white;
+}
+
+.list-page li.item {
+    text-align: center;
+    padding-left: 23%;
+    padding-right: 23%;
+}
+
+.list-page {
+    width: 50%;
+    margin: auto;
+}
+
 
 
 img.img-size-50 {

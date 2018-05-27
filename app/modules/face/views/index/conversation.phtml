@@ -43,19 +43,19 @@
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-                <form action="#" method="post">
-                    <div class="input-group">
-                        <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                        <span class="input-group-append">
-                    <button type="button" class="btn btn-primary">Send</button>
+                <div class="input-group">
+                    <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-append">
+                    <button type="button" class="btn btn-primary send" data-id_send="">Send</button>
                   </span>
-                    </div>
-                </form>
+                </div>
             </div>
             <!-- /.card-footer-->
         </div>
         <!--/.direct-chat -->
     </div>
+
+    <!--    đặt đơn hàng-->
     <div class="order">
         <!-- general form elements disabled -->
         <div class="card card-default">
@@ -64,31 +64,115 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+                <form role="form" >
+                    <div class="input-order">
+                        <div style="text-align: center"><b style="color: #0bb70b">Người nhận hàng</b></div>
+                        <hr>
+                        <div class="form-group">
+                            <label>Tên</label>
+                            <input type="text" name="name" class="form-control name-order"
+                                   placeholder="Enter ...">
+                            <input type="hidden" name="id_customer" class="form-control id-order"
+                                   placeholder="Enter ...">
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="text" name="sdt" class="form-control" placeholder="Enter ...">
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ shipping</label>
+                            <input type="text" name="shipping" class="form-control" placeholder="Enter ...">
+                        </div>
 
-                <div class="postId"><?php echo "<b>POST ID:</b>" . ((!empty($result)) ? $result : '') ?></div>
-                <form role="form" method="post">
+                        <div class="form-group">
+                            <label>Tỉnh/thành</label>
+                            <select class="form-control slt-province" name="province">
+                                <?php foreach ($allProvince as $key=> $val) { ?>
+                                    <option value="<?php echo $key?>"><?php echo $val ?></option>
+                                <?php } ?>
 
-                    <div class="form-group">
-                        <label>Access Token</label>
-                        <input type="text" name="form[txtToken]" class="form-control" placeholder="Enter ...">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quận/huyện</label>
+                            <select class="form-control slt-district" name="district">
+                                <?php foreach ($district as $value) { ?>
+                                    <option value="<?php echo $value['DistrictID']?>"><?php echo $value['DistrictName'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phường/xã</label>
+                            <select class="form-control slt-wards" name="wards">
+                                <?php foreach ($wards['Wards'] as $v) { ?>
+                                    <option value="<?php echo $v['WardCode']?>"><?php echo $v['WardName'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div style="text-align: center"><b style="color: #0bb70b">Gói hàng</b></div>
+                        <hr>
+
+                        <div class="form-group">
+                            <label>Khối lượng</label>
+                            <input type="text" name="size" class="form-control" placeholder="10200 gram">
+                        </div>
+                        <div class="form-group">
+                            <label>Kích thước</label>
+                            <div class="size">
+                                <input type="text" name="long" class="form-control size-product" placeholder="dài">
+                                <input type="text" name="width" class="form-control size-product" placeholder="rộng">
+                                <input type="text" name="height" class="form-control size-product" placeholder="cao">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label>Ghi chú shipping</label>
+                            <select class="form-control" name="NoteCode">
+
+                                <option value="CHOTHUHANG">CHOTHUHANG</option>
+                                <option value="CHOXEMHANGKHONGTHU">CHOXEMHANGKHONGTHU</option>
+                                <option value="KHONGCHOXEMHANG">KHONGCHOXEMHANG</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ghi chú</label>
+                            <input type="text" name="txtNote" class="form-control" placeholder="Ghi chú">
+                        </div>
+                        <div style="text-align: center"><b style="color: #0bb70b">Gói cước</b></div>
+                        <hr>
+                        <div class="form-group">
+                            <label>Tiền thu hộ</label>
+                            <input type="text" name="amount" class="form-control" placeholder="Enter ...">
+                        </div>
+                        <div class="form-group">
+                            <label>Mã Coupon</label>
+                            <input type="text" name="coupon" class="form-control" placeholder="Enter ...">
+                        </div>
+                        <div class="form-group">
+                            <label>Người thanh toán</label>
+                            <select class="form-control" name="PaymentTypeID">
+                                <option value="1">Người gửi</option>
+                                <option value="2">Người nhận</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Caption</label>
-                        <input type="text" name="form[txtCaption]" class="form-control" placeholder="Enter ...">
-                    </div>
-                    <div class="form-group">
-                        <label>Link Photo</label>
-                        <textarea class="form-control" name="form[txtLink]" rows="3"
-                                  placeholder="https://pictures/navas.jpg"></textarea>
-                    </div>
+
                     <button type="submit" class="btn btn-block btn-success">Success</button>
                 </form>
+
+
             </div>
             <!-- /.card-body -->
         </div>
     </div>
 
 </div>
+<script>
+    var idPage = '<?php echo $_GET['id_page']; ?>'
+
+</script>
 
 
 

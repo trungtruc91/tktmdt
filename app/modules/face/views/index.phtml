@@ -161,10 +161,10 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="index3.html" class="brand-link">
-            <img src="../../public/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <a href="/face/index/profile" class="brand-link">
+            <img src="//graph.facebook.com/<?php echo $_SESSION['userData']['id'].'/picture'?>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                  style="opacity: .8">
-            <span class="brand-text font-weight-light">API Facebook</span>
+            <span class="brand-text font-weight-light"><?php echo $_SESSION['userData']['last_name'].$_SESSION['userData']['first_name'];?></span>
         </a>
 
         <!-- Sidebar -->
@@ -203,6 +203,12 @@
                                 <a href="/face/index/reaction" class="nav-link">
                                     <i class="fa fa-circle-o nav-icon"></i>
                                     <p>Get Reaction</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/face/index/selectpage" class="nav-link">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>Conversation</p>
                                 </a>
                             </li>
 

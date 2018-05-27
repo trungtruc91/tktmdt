@@ -1,0 +1,115 @@
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"
+                                 src="<?php echo $_SESSION['userData']['picture']['url']?>"
+                                 alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center"><?php echo $_SESSION['userData']['last_name'].$_SESSION['userData']['first_name']?></h3>
+
+                        <p class="text-muted text-center">Người bán hàng</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Followers</b> <a class="float-right">1,322</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Following</b> <a class="float-right">543</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Friends</b> <a class="float-right">13,287</a>
+                            </li>
+                        </ul>
+
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+
+                            <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Thông tin người bán</a></li>
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+
+
+                            <div class="tab-pane active" id="settings">
+                                <form class="form-horizontal" action="#" method="post">
+                                    <div class="form-group">
+                                        <label>Tên người bán hàng</label>
+                                        <input type="text" name="form[name]" class="form-control name-order" value="<?php echo $data['full_name']?>"  placeholder="Enter ...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Số điện thoại</label>
+                                        <input type="text" name="form[sdt]" class="form-control" value="<?php echo $data['number_phone']?>" placeholder="Enter ...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" name="form[email]" class="form-control" value="<?php echo $data['email']?>" placeholder="Enter ...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Địa chỉ</label>
+                                        <input type="text" name="form[address]" class="form-control" value="<?php echo $data['address']?>" placeholder="Enter ...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tỉnh/thành</label>
+                                        <select class="form-control slt-province" name="form[province]">
+                                            <?php foreach ($allProvince as $key=> $val){?>
+                                                <option value="<?php echo $key?>" <?php echo (($key==$data['province_code'])?'selected':'') ?>><?php echo $val?></option>
+                                            <?php }?>
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Quận/huyện</label>
+                                        <select class="form-control slt-district" name="form[district]">
+                                            <?php foreach ($district as $value){?>
+                                                <option <?php echo (($value['DistrictID']==$data['district_code'])?'selected':'') ?> value="<?php echo $value['DistrictID'] ?>"><?php echo $value['DistrictName']?></option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Phường/xã</label>
+                                        <select class="form-control slt-wards" name="form[wards]">
+                                            <?php foreach ($wards['Wards'] as $v){?>
+                                                <option <?php echo (($v['WardCode']==$data['wards_code'])?'selected':'') ?> value="<?php echo $v['WardCode']?>"><?php echo $v['WardName']?></option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" class="btn btn-danger">Lưu</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.nav-tabs-custom -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
