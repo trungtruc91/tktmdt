@@ -1,0 +1,148 @@
+
+<div class="order-update">
+    <!-- general form elements disabled -->
+    <div class="card card-default custom-default">
+        <div class="card-header">
+            <h3 class="card-title" style="text-align: center">Order</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body custom-card-body">
+            <form role="form" >
+                <div class="update-order">
+                    <div style="text-align: center"><b style="color: #0bb70b">Người nhận hàng</b></div>
+                    <hr>
+                    <div class="form-group">
+                        <label>Tên</label>
+                        <input type="text" name="name" class="form-control name-order" value="<?php echo $result[0]['info_ordered'][0]['CustomerName']?>"
+                               placeholder="Enter ...">
+                        <input type="hidden" name="ID_create" class="form-control id-order" value="<?php echo $_GET['id_order']?>"
+                               placeholder="Enter ...">
+                        <input type="hidden" name="OrderID" class="form-control id-order" value="<?php echo $result[0]['OrderID']?>"
+                               placeholder="Enter ...">
+                        <input type="hidden" name="OrderCode" class="form-control id-order" value="<?php echo $result[0]['OrderCode']?>"
+                               placeholder="Enter ...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="text" name="sdt" class="form-control" value="<?php echo $result[0]['info_ordered'][0]['CustomerPhone']?>"
+                               placeholder="Enter ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ shipping</label>
+                        <input type="text" name="shipping" class="form-control" value="<?php echo $result[0]['info_ordered'][0]['ShippingAddress']?>"
+                               placeholder="Enter ...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tỉnh/thành</label>
+                        <select class="form-control slt-province" name="province">
+                            <option value="">Chọn tỉnh/thành</option>
+                            <?php foreach ($allProvince as $key=> $val) { ?>
+                                <option <?php echo (($key==$result[0]['info_ordered'][0]['code_province'])?"selected":"")?> value="<?php echo $key?>"><?php echo $val ?></option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quận/huyện</label>
+                        <select class="form-control slt-district" name="district">
+                            <option value="">Chọn quận/huyện</option>
+                            <?php foreach ($district as $value) { ?>
+                                <option <?php echo (($value['DistrictID']==$result[0]['info_ordered'][0]['FromDistrictID'])?"selected":"")?> value="<?php echo $value['DistrictID']?>"><?php echo $value['DistrictName'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phường/xã</label>
+                        <select class="form-control slt-wards" name="wards">
+                            <option value="">Chọn phường/xã</option>
+                            <?php foreach ($wards['Wards'] as $v) { ?>
+                                <option <?php echo (($v['WardCode']==$result[0]['info_ordered'][0]['FromWardCode'])?"selected":"")?> value="<?php echo $v['WardCode']?>"><?php echo $v['WardName'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div style="text-align: center"><b style="color: #0bb70b">Gói hàng</b></div>
+                    <hr>
+
+                    <div class="form-group">
+                        <label>Khối lượng</label>
+                        <input type="text" name="size" class="form-control weight-order" value="<?php echo $result[0]['info_ordered'][0]['Weight']?>"
+                               placeholder="10200 gram">
+                    </div>
+                    <div class="form-group">
+                        <label>Kích thước</label>
+                        <div class="size">
+                            <input type="text" name="long" class="form-control size-product long-order" value="<?php echo $result[0]['info_ordered'][0]['Length']?>"
+                                   placeholder="dài">
+                            <input type="text" name="width" class="form-control size-product width-order" value="<?php echo $result[0]['info_ordered'][0]['Width']?>"
+                                   placeholder="rộng">
+                            <input type="text" name="height" class="form-control size-product height-order" value="<?php echo $result[0]['info_ordered'][0]['Height']?>"
+                                   placeholder="cao">
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Ghi chú shipping</label>
+                        <select class="form-control" name="NoteCode">
+
+                            <option <?php echo (($result[0]['info_ordered'][0]['NoteCode']=='CHOTHUHANG')?"selected":"")?> value="CHOTHUHANG">CHOTHUHANG</option>
+                            <option <?php echo (($result[0]['info_ordered'][0]['NoteCode']=='CHOXEMHANGKHONGTHU')?"selected":"")?> value="CHOXEMHANGKHONGTHU">CHOXEMHANGKHONGTHU</option>
+                            <option <?php echo (($result[0]['info_ordered'][0]['NoteCode']=='KHONGCHOXEMHANG')?"selected":"")?> value="KHONGCHOXEMHANG">KHONGCHOXEMHANG</option>
+
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ghi chú</label>
+                        <input type="text" name="txtNote" class="form-control" value="<?php echo $result[0]['info_ordered'][0]['Note']?>"
+                               placeholder="Ghi chú">
+                    </div>
+                    <div style="text-align: center"><b style="color: #0bb70b">Gói cước</b></div>
+                    <hr>
+                    <div class="form-group">
+                        <label>Tiền thu hộ</label>
+                        <input type="text" name="amount" class="form-control" value="<?php echo $result[0]['info_ordered'][0]['CoDAmount']?>"
+                               placeholder="Enter ...">
+                    </div>
+                    <div class="form-group group-service">
+                        <?php foreach ($service['data'] as $val){
+                            $format=new DateTime($val['ExpectedDeliveryTime']);
+                            $stand=$format->format("d/m/Y");
+                            $fee=number_format($val['ServiceFee'],0,'.',',');
+                            ?>
+                        <div class="service-radio">
+                            <input type="radio" <?php echo (($val['ServiceID']==$result[0]['info_ordered'][0]['ServiceID'])?"checked":"") ?>
+                                   name="ServiceID" value="<?php echo $val['ServiceID']  ?>"> <?php echo "{$val['Name']}|{$fee}đ|{$stand}"?>
+                        </div>
+                        <?php
+                            }
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <label>Mã Coupon</label>
+                        <input type="text" name="coupon" class="form-control" value="<?php echo $result[0]['info_ordered'][0]['CouponCode']?>"
+                               placeholder="Enter ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Người thanh toán</label>
+                        <select class="form-control" name="PaymentTypeID">
+                            <option <?php echo (($result[0]['info_ordered'][0]['PaymentTypeID']=='1')?"selected":"")?> value="1">Người gửi</option>
+                            <option <?php echo (($result[0]['info_ordered'][0]['PaymentTypeID']=='2')?"selected":"")?> value="2">Người nhận</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-block btn-success btn-update-order">Success</button>
+            </form>
+
+
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+
+<script>
+    var typeSubmit='update';
+    var userDistrict='<?php echo $_SESSION['userData']['DistrictID'] ?>';
+</script>

@@ -1,6 +1,8 @@
 var server_url = '/face';
 
+
 $(function () {
+
     var dem = 0;
     //load conversation when click
     $('.product-info a').click(loadConversation);
@@ -19,22 +21,58 @@ $(function () {
     $('form .btn-success').click(function (e) {
         e.preventDefault();
         dem++;
-        console.log(dem);
-        if (dem === 1) {
-            var data = $("form :input").serializeArray();
-            getScriptAjax('/index/submitorder', {data: data}, function (response) {
-                console.log(response);
-            });
+        var ckInput=0;
+        var ckSelect=0;
+        $('.input-order select').each(function () {
+           var sltEmpty=$(this).val();
+           if (sltEmpty===''){
+               ckSelect++;
+           }
+        });
+        $('.input-order input').not("input[name='id_customer'],input[name='coupon']").each(function () {
+           var empty=$(this).val();
+           if(empty===''){
+               ckInput++;
+           }
+        });
+
+        if(ckInput===0 && ckSelect===0) {
+            if (dem === 1) {
+                var data = $("form :input").serializeArray();
+                console.log(data);
+                console.log(typeof typeSubmit);
+                if(typeof typeSubmit !== 'undefined'){
+                    url='/order/submitupdateorder';
+                }else{
+                    url='/customer/submitorder';
+                }
+                getScriptAjax(url, "GET", {data: data}, function (response) {
+                    var code=response.code;
+                    var msg=response.msg;
+                    if(code===0){
+                        loadToastr(0,msg);
+                    }
+                    if(code===1){
+                        var totalFee=response.data.TotalServiceFee.format(0,3,".",",");
+                        var notify='Total: '+totalFee+'đ';
+                        loadToastr(1,notify);
+                    }
+                });
+            }
+            setTimeout(function () {
+                dem = 0;
+            }, 1000);
+        }else {
+            loadToastr(0,'Vui lòng điền đầy đủ thông tin!');
         }
-        setTimeout(function () {
-            dem = 0;
-        }, 1000);
     });
     //end submit order
+
+
     //load district
     $('.slt-province').change(function () {
        var province_id=$('.slt-province option:selected').val();
-       getScriptAjax('/index/getdistrictbyid',{idProvince: province_id},function (response) {
+       getScriptAjax('/customer/getdistrictbyid',"GET",{idProvince: province_id},function (response) {
            $('.slt-district option').remove();
            $('.slt-district').append(htmlOption(response[province_id],'district'))
 
@@ -45,7 +83,7 @@ $(function () {
     // load wards
     $('.slt-district').change(function () {
        var district_id=$('.slt-district option:selected').val();
-       getScriptAjax('/index/getwardbyid',{idDistrict: district_id},function (response) {
+       getScriptAjax('/customer/getwardbyid',"GET",{idDistrict: district_id},function (response) {
            console.log(response);
            $('.slt-wards option').remove();
            $('.slt-wards').append(htmlOption(response[district_id],'wards'));
@@ -53,16 +91,95 @@ $(function () {
 
     });
     //end load
+
+    //load service
+    $(document).on('blur','.slt-district, .weight-order, .long-order, .height-order, .width-order',function () {
+        var weight=$("input[name='size']").val();
+        var long=$("input[name='long']").val();
+        var width=$("input[name='width']").val();
+        var height=$("input[name='height']").val();
+        var idDistrict=$('.slt-district').val();
+        var service={
+            "token": "5b06841f1070b07345645cf1",
+            "Weight": parseInt(weight),
+            "Length": parseInt(long),
+            "Width": parseInt(width),
+            "Height": parseInt(height),
+            "FromDistrictID": parseInt(userDistrict),
+            "ToDistrictID": parseInt(idDistrict),
+            "CouponCode": ""
+        };
+        console.log(service);
+        if(weight!==''&&long!==''&&width!==''&&height!==''&&idDistrict!==''){
+            $('.service-radio, .label-service').remove();
+            getScriptAjaxApi('https://console.ghn.vn/api/v1/apiv3/FindAvailableServices',"POST",JSON.stringify(service),function (response) {
+                console.log(response);
+                $('.group-service').append(htmlService(response.data));
+            });
+        }else{
+            console.log('wrong');
+        }
+
+    });
+    //end
+
+    //cancel order
+    $(".cancel-order").click(function () {
+        var check=confirm("Bạn có chắc muốn hủy đơn hàng!");
+        var order_code=$(this).data("order_code");
+        var id_create=$(this).data("id");
+        if(check==1) {
+            getScriptAjax('/order/cancelorder', "GET", {orderCode: order_code,id_create:id_create}, function (response) {
+                console.log(response);
+                window.location.reload();
+            });
+        }
+    });
+    //end cancel
 });
 var replyMessage = function () {
     var idSend = $(this).data('id_send');
     var text = $("input[name='message']").val();
 
-    getScriptAjax('/index/sendmessage', {data: idSend, text: text}, function (response) {
+    getScriptAjax('/customer/sendmessage',"GET", {data: idSend, text: text}, function (response) {
         var text = $("input[name='message']").val('');
     });
 };
+
 var timeLoad = '';
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+function loadToastr(status, msg) {
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "rtl": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": 300,
+        "hideDuration": 1000,
+        "timeOut": 5000,
+        "extendedTimeOut": 1000,
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    if (status == 1) {
+        toastr.success(msg, 'Success');
+    } else {
+        toastr.error(msg, 'Error');
+    }
+}
 var loadConversation = function (e) {
     e.preventDefault();
     if (typeof timeLoad === 'number') {
@@ -89,7 +206,7 @@ var loadConversation = function (e) {
     $('button.send').attr('data-id_send', id);
     timeLoad = setInterval(function () {
         console.log(id);
-        getScriptAjax('/index/message', {data: id}, function (reponse) {
+        getScriptAjax('/customer/message',"GET", {data: id}, function (reponse) {
             $('.direct-chat-messages').remove('#loader');
             $('.direct-chat-messages').html(htmlChat(reponse));
             var height = 0;
@@ -103,13 +220,36 @@ var loadConversation = function (e) {
     }, 5000);
 
 };
-var getScriptAjax = function (url, options, callback) {
+var getScriptAjax = function (url,method ,options, callback) {
     options = options || {};
     options.data = options.data || {};
     url = server_url + url;
     $.ajax({
         url: url,
         data: options,
+        method: method,
+        dataType: "json",
+        cache: true,
+        // ifModified:true,
+        error: function (response) {
+
+            console.log(response);
+
+        },
+        success: function (response) {
+
+            ('function' == typeof callback) && callback(response);
+        }
+
+    });
+};
+var getScriptAjaxApi = function (url,method ,options, callback) {
+    options = options || {};
+    options.data = options.data || {};
+    $.ajax({
+        url: url,
+        data: options,
+        method: method,
         dataType: "json",
         cache: true,
         // ifModified:true,
@@ -183,6 +323,7 @@ function htmlChat(data) {
 function htmlOption(data,type) {
 
     return html`    
+            <option value="">${((type==='district')?'Chọn quận/huyện':'Chọn phường/xã')}</option>
             ${data.map(function (item, index) {
                  var value='';
                     var text='';
@@ -201,6 +342,24 @@ function htmlOption(data,type) {
     }).join('')
         }`
 }
+function htmlService(data) {
+        var dem=1;
+    return html`  
+   
+         <label class="label-service">Gói dịch vụ</label> 
+            ${data.map(function (item, index) {
+                
+             var time=new Date(item.ExpectedDeliveryTime);
+             
+        console.log(time);
+        var tmpHtml='';
+            tmpHtml+=html`<div class="service-radio"><input type="radio"  ${((dem++===1)?'checked':'')} name="ServiceID" value="${item.ServiceID}">${""+item.Name+"| "+ item.ServiceFee.format(0,3,'.', ',')+"đ| "+ time.toLocaleDateString()} </div>`
+            return tmpHtml;       
+    }).join('')
+        }    
+        `
+}
+
 
 function html(literalSections, ...substs) {
     // Use raw literal sections: we don’t want
@@ -237,4 +396,6 @@ function html(literalSections, ...substs) {
 
     return result;
 }
+
+
 

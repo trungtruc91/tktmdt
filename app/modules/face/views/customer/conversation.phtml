@@ -1,3 +1,4 @@
+
 <div class="list-contact">
     <div class="card">
         <div class="card-header">
@@ -75,6 +76,7 @@
                             <input type="hidden" name="id_customer" class="form-control id-order"
                                    placeholder="Enter ...">
                         </div>
+
                         <div class="form-group">
                             <label>Số điện thoại</label>
                             <input type="text" name="sdt" class="form-control" placeholder="Enter ...">
@@ -87,6 +89,7 @@
                         <div class="form-group">
                             <label>Tỉnh/thành</label>
                             <select class="form-control slt-province" name="province">
+                                <option value="">Chọn tỉnh/thành</option>
                                 <?php foreach ($allProvince as $key=> $val) { ?>
                                     <option value="<?php echo $key?>"><?php echo $val ?></option>
                                 <?php } ?>
@@ -96,6 +99,7 @@
                         <div class="form-group">
                             <label>Quận/huyện</label>
                             <select class="form-control slt-district" name="district">
+                                <option value="">Chọn quận/huyện</option>
                                 <?php foreach ($district as $value) { ?>
                                     <option value="<?php echo $value['DistrictID']?>"><?php echo $value['DistrictName'] ?></option>
                                 <?php } ?>
@@ -104,6 +108,7 @@
                         <div class="form-group">
                             <label>Phường/xã</label>
                             <select class="form-control slt-wards" name="wards">
+                                <option value="">Chọn phường/xã</option>
                                 <?php foreach ($wards['Wards'] as $v) { ?>
                                     <option value="<?php echo $v['WardCode']?>"><?php echo $v['WardName'] ?></option>
                                 <?php } ?>
@@ -114,14 +119,14 @@
 
                         <div class="form-group">
                             <label>Khối lượng</label>
-                            <input type="text" name="size" class="form-control" placeholder="10200 gram">
+                            <input type="text" name="size" class="form-control weight-order" placeholder="10200 gram">
                         </div>
                         <div class="form-group">
                             <label>Kích thước</label>
                             <div class="size">
-                                <input type="text" name="long" class="form-control size-product" placeholder="dài">
-                                <input type="text" name="width" class="form-control size-product" placeholder="rộng">
-                                <input type="text" name="height" class="form-control size-product" placeholder="cao">
+                                <input type="text" name="long" class="form-control size-product long-order" placeholder="dài">
+                                <input type="text" name="width" class="form-control size-product width-order" placeholder="rộng">
+                                <input type="text" name="height" class="form-control size-product height-order" placeholder="cao">
                             </div>
 
                         </div>
@@ -145,6 +150,9 @@
                         <div class="form-group">
                             <label>Tiền thu hộ</label>
                             <input type="text" name="amount" class="form-control" placeholder="Enter ...">
+                        </div>
+                        <div class="form-group group-service">
+
                         </div>
                         <div class="form-group">
                             <label>Mã Coupon</label>
@@ -170,7 +178,8 @@
 
 </div>
 <script>
-    var idPage = '<?php echo $_GET['id_page']; ?>'
+    var idPage = '<?php echo $_GET['id_page']; ?>';
+    var userDistrict='<?php echo $_SESSION['userData']['DistrictID'] ?>';
 
 </script>
 

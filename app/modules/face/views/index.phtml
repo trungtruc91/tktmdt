@@ -18,6 +18,7 @@
 <!--    <link rel="stylesheet" href="../../public/css/custom.css">-->
     <link rel="stylesheet" href="../../public/css/conversation.css">
     <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="stylesheet" href="../../public/css/toastr.min.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="../../public/plugins/iCheck/flat/blue.css">
     <!-- Morris chart -->
@@ -30,8 +31,12 @@
     <link rel="stylesheet" href="../../public/plugins/daterangepicker/daterangepicker-bs3.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="../../public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="../../public/plugins/datatables/dataTables.bootstrap4.min.css">
+
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <script src="../../public/plugins/jquery/jquery.min.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -188,27 +193,58 @@
                         <a href="#" class="nav-link">
                             <i class="nav-icon fa fa-book"></i>
                             <p>
-                                Pages
+                                Interaction
                                 <i class="fa fa-angle-left right"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/face/index/post" class="nav-link">
+                                <a href="/face/interact/post" class="nav-link">
                                     <i class="fa fa-circle-o nav-icon"></i>
                                     <p>Post</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/face/index/reaction" class="nav-link">
+                                <a href="/face/interact/reaction" class="nav-link">
                                     <i class="fa fa-circle-o nav-icon"></i>
                                     <p>Get Reaction</p>
                                 </a>
                             </li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-address-book"></i>
+                            <p>
+                                Manage Customer
+                                <i class="fa fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+
                             <li class="nav-item">
-                                <a href="/face/index/selectpage" class="nav-link">
+                                <a href="/face/customer/selectpage" class="nav-link">
                                     <i class="fa fa-circle-o nav-icon"></i>
                                     <p>Conversation</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-pencil-square-o"></i>
+                            <p>
+                                Manage Order
+                                <i class="fa fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/face/order/ordered" class="nav-link">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>Ordered</p>
                                 </a>
                             </li>
 
@@ -267,8 +303,10 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="../../public/plugins/jquery/jquery.min.js"></script>
+
 <script src="../../public/js/chat.js"></script>
+<script src="../../public/js/toastr.js"></script>
+
 <!-- jQuery UI 1.11.4 -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -304,6 +342,9 @@
 <script src="../../public/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../public/dist/js/demo.js"></script>
+<script src="../../public/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../public/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+<!-- DataTables -->
 <!--<script type="text/javascript" src="../../public/js/modernizr.js"></script>-->
 <!--<script type="text/javascript" src="../../public/js/bootstrap.min.js"></script>-->
 <!--<script type="text/javascript" src="../../public/js/main.js"></script>-->

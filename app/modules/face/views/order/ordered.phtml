@@ -1,0 +1,115 @@
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card " style="height: auto">
+                <div class="card-header">
+                    <h3 class="card-title">Đơn hàng</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" >
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <?php
+                            foreach ($result as $k1 => $value) {
+                                $result[$k1]['Action'] = "Cancel";
+                            }
+                            $expect = ['_id', 'userId', 'ExpectedDeliveryTime', 'ClientHubID', 'ExtraFee', 'SortCode', 'id_customer', 'id_create'];
+                            foreach ($result[0] as $k => $v) {
+
+                                if (!in_array($k, $expect)) {
+
+                                    echo "<th>$k</th>";
+                                }
+                            }
+
+                            ?>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php foreach ($result as $val) {
+                            echo " <tr>";
+                            foreach ($val as $k => $v) {
+                                if (!in_array($k, $expect)) {
+                                    switch ($k) {
+                                        case 'PaymentTypeID':
+                                            $payment = (($v == 2) ? 'Người nhận' : 'Người gửi');
+                                            echo "<td>$payment</td>";
+                                            break;
+
+                                        case 'TotalServiceFee':
+                                            $fee = number_format($v, 0, ".", ",");
+                                            echo "<td>$fee</td>";
+                                            break;
+                                        case 'ExpectedDeliveryTime':
+                                            $date = new DateTime($v);
+                                            $time = $date->format('d-m-Y');
+                                            echo "<td>$time</td>";
+                                            break;
+                                        case 'OrderCode':
+
+                                            echo "<td><a href='/face/index/updateorder?id_order={$val['id_create']}'>$v</a></td>";
+                                            break;
+                                        case 'Action':
+
+                                            echo "<td><button class='btn btn-danger cancel-order' data-order_code='{$val['OrderCode']}' data-id='{$val['id_create']}'>$v</button></td>";
+                                            break;
+                                        default:
+                                            echo "<td>$v</td>";
+                                            break;
+                                    }
+                                }
+                            }
+                            echo " </tr>";
+                        }
+                        ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <?php
+
+                            foreach ($result[0] as $k => $value) {
+
+                                if (!in_array($k, $expect)) {
+                                    echo "<th>$k</th>";
+
+                                }
+
+                            }
+                            ?>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+<!--<script src="../../public/plugins/jquery/jquery.min.js"></script>-->
+<script>
+    $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+
+        });
+    });
+</script>
+
