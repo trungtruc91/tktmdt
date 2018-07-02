@@ -2,11 +2,12 @@
 
 
 namespace Zs\Face\Controllers;
+
+
 use Phalcon\Http\Request;
-use Zs\Face\Models\Member;
 use Zs\Face\Models\Post;
 
-class InteractController extends LoginController
+class PostController extends LoginController
 {
     public $_access='';
     public $_request='';
@@ -22,32 +23,30 @@ class InteractController extends LoginController
         $this->_access = $_SESSION['access_token'];
     }
 
-    public function reactionAction()
+    public function indexAction()
     {
         $params = $this->_request->get();
-        if(isset($params['PostID'])) {
-            $token = $params['access_token'];
-            $id_post = $params['PostID'];
-            $option = $params['form']['slcReaction'];
-            $url = "https://graph.facebook.com/v2.12/$id_post/$option?access_token=$token";
-
-            while (1) {
-                $response = json_decode($this->_client->createCurl($url), 1);
-
-                $next = @$response['paging']['next'];
-                $data[] = $response['data'];
-                if (isset($next)) {
-                    $url = $next;
-                } else {
-                    break;
-                }
+        if(isset($params['id_page'])) {
+            if($this->_request->isPost()) {
+                $qrPost = new Post();
+                $data = 'access_token=' . $params['access_token'] . '&url=' . $params['form']['txtLink'] . '&caption=' . $params['form']['txtCaption'];
+                $url = "https://graph.facebook.com/v2.12/{$params['id_page']}/photos";
+                $this->_client->setPost($data);
+                $response = $this->_client->createCurl($url);
+                $data = [
+                    'PostID' => json_decode($response, 1)['post_id'],
+                    'Caption' => $params['form']['txtCaption'],
+                    'UserID' => $_SESSION['userData']['id'],
+                    'PageID'=>$params['id_page']
+                ];
+                $qrPost->save($data);
             }
-            if($this->_request->isPost()){
-                $this->view->select=$params['form']['slcReaction'];
-                $this->view->postId=$id_post;
-            }
-            $this->view->result = $data;
+            $this->view->result = json_decode($response, 1)['post_id'];
+        }else{
+            $this->response->redirect('http://tructt.laptrinhaz.com/face/login/index');
+
         }
+
     }
     public function selectPageAction()
     {
@@ -95,33 +94,4 @@ class InteractController extends LoginController
 
         $this->view->result = $total_post;
     }
-
-    public function listPostAction(){
-        $params=$this->_request->get();
-        if(isset($params['PageID'])){
-            $qrPost=new Post();
-            $result=$qrPost->getItemById($params['PageID'])->toArray();
-            $this->view->result=$result;
-            $this->view->token=$params['access_token'];
-        }
-
-    }
-
-    public function submitMemberAction(){
-        $params=$this->_request->get();
-        if(isset($params['arrData'])){
-            $qrMember=new Member();
-            foreach ($params['arrData'] as $key => $value){
-                $checkExist=$qrMember->getItem($value['MemberID'],$value['TypeInteract'])->toArray();
-                if(empty($checkExist)){
-                    $qrMember->save($params['arrData'][$key]);
-                }
-            }
-            $noti=['code'=>1,'message'=>'success'];
-            echo json_encode($noti);
-            $this->view->disable();
-        }
-
-    }
-
 }

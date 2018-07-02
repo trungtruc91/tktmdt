@@ -39,7 +39,7 @@
                         <select class="form-control slt-province" name="province">
                             <option value="">Chọn tỉnh/thành</option>
                             <?php foreach ($allProvince as $key=> $val) { ?>
-                                <option <?php echo (($key==$result[0]['info_ordered'][0]['code_province'])?"selected":"")?> value="<?php echo $key?>"><?php echo $val ?></option>
+                                <option <?php echo (($key==$result[0]['info_ordered'][0]['ProvinceCode'])?"selected":"")?> value="<?php echo $key?>"><?php echo $val ?></option>
                             <?php } ?>
 
                         </select>
@@ -49,7 +49,7 @@
                         <select class="form-control slt-district" name="district">
                             <option value="">Chọn quận/huyện</option>
                             <?php foreach ($district as $value) { ?>
-                                <option <?php echo (($value['DistrictID']==$result[0]['info_ordered'][0]['FromDistrictID'])?"selected":"")?> value="<?php echo $value['DistrictID']?>"><?php echo $value['DistrictName'] ?></option>
+                                <option <?php echo (($value['DistrictID']==$result[0]['info_ordered'][0]['ToDistrictID'])?"selected":"")?> value="<?php echo $value['DistrictID']?>"><?php echo $value['DistrictName'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -58,7 +58,7 @@
                         <select class="form-control slt-wards" name="wards">
                             <option value="">Chọn phường/xã</option>
                             <?php foreach ($wards['Wards'] as $v) { ?>
-                                <option <?php echo (($v['WardCode']==$result[0]['info_ordered'][0]['FromWardCode'])?"selected":"")?> value="<?php echo $v['WardCode']?>"><?php echo $v['WardName'] ?></option>
+                                <option <?php echo (($v['WardCode']==$result[0]['info_ordered'][0]['ToWardCode'])?"selected":"")?> value="<?php echo $v['WardCode']?>"><?php echo $v['WardName'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -133,7 +133,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-block btn-success btn-update-order">Success</button>
+                <button type="submit" class="btn btn-block btn-success btn-update-order">Submit</button>
             </form>
 
 

@@ -1,15 +1,22 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: HAOHAO100
+ * Date: 7/2/2018
+ * Time: 11:16 PM
+ */
 
 namespace Zs\Face\Controllers;
+
 use Phalcon\Http\Request;
 use Zs\Face\Models\Member;
 use Zs\Face\Models\Post;
 
-class InteractController extends LoginController
+class ManagePostController extends LoginController
 {
-    public $_access='';
-    public $_request='';
+    public $_access = '';
+    public $_request = '';
+
     public function initialize()
     {
         parent::initialize();
@@ -25,7 +32,7 @@ class InteractController extends LoginController
     public function reactionAction()
     {
         $params = $this->_request->get();
-        if(isset($params['PostID'])) {
+        if (isset($params['PostID'])) {
             $token = $params['access_token'];
             $id_post = $params['PostID'];
             $option = $params['form']['slcReaction'];
@@ -42,13 +49,14 @@ class InteractController extends LoginController
                     break;
                 }
             }
-            if($this->_request->isPost()){
-                $this->view->select=$params['form']['slcReaction'];
-                $this->view->postId=$id_post;
+            if ($this->_request->isPost()) {
+                $this->view->select = $params['form']['slcReaction'];
+                $this->view->postId = $id_post;
             }
             $this->view->result = $data;
         }
     }
+
     public function selectPageAction()
     {
         //get info post of user
@@ -96,32 +104,39 @@ class InteractController extends LoginController
         $this->view->result = $total_post;
     }
 
-    public function listPostAction(){
-        $params=$this->_request->get();
-        if(isset($params['PageID'])){
-            $qrPost=new Post();
-            $result=$qrPost->getItemById($params['PageID'])->toArray();
-            $this->view->result=$result;
-            $this->view->token=$params['access_token'];
+    public function listPostAction()
+    {
+        $params = $this->_request->get();
+        if (isset($params['PageID'])) {
+            $qrPost = new Post();
+            $result = $qrPost->getItemById($params['PageID'])->toArray();
+            $this->view->result = $result;
+            $this->view->token = $params['access_token'];
         }
 
     }
 
-    public function submitMemberAction(){
-        $params=$this->_request->get();
-        if(isset($params['arrData'])){
-            $qrMember=new Member();
-            foreach ($params['arrData'] as $key => $value){
-                $checkExist=$qrMember->getItem($value['MemberID'],$value['TypeInteract'])->toArray();
-                if(empty($checkExist)){
-                    $qrMember->save($params['arrData'][$key]);
-                }
+    public function listMemberAction()
+    {
+        $params = $this->_request->get();
+        if (isset($params['PostID'])) {
+            $qrPost = new Post();
+            $result = $qrPost->join($params['PostID']);
+            foreach ($result as $value) {
+                $data[] = $value;
             }
-            $noti=['code'=>1,'message'=>'success'];
-            echo json_encode($noti);
-            $this->view->disable();
+
+            $this->view->result = $this->jsonParse($data);
+            $this->view->token = $params['access_token'];
         }
 
     }
+
+    private function jsonParse($data)
+    {
+        $d = json_encode($data);
+        return json_decode($d, 1);
+    }
+
 
 }

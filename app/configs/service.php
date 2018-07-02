@@ -8,15 +8,12 @@ $di = new Phalcon\Di\FactoryDefault();
 //set module default
 $di->set('router',function (){
    return include_once CONFIG_PATH."/router.php";
-
-
 });
 
 
 $di->setShared('zs_configs', function () use ($di) {
     $configPath = CONFIG_PATH . '/configs.php';
     $configs = new Phalcon\Config\Adapter\Php($configPath);
-
     return $configs;
 });
 

@@ -1,0 +1,76 @@
+<?php
+//echo "<pre>";
+//print_r($result);
+//echo "</pre>";die;
+?>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card " style="height: auto">
+                <div class="card-header">
+                    <h3 class="card-title">Đơn hàng</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" >
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Stt</th>
+                            <th>Username</th>
+                            <th>Type</th>
+                            <th>Comment</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php  foreach ($result as $key=> $val) {
+                            ++$key;
+                            echo "<tr>
+                                    <td>{$key}</td>
+                                    <td><a href='https://fb.com/{$val['MemberID']}'>{$val['Username']}</a></td>                                    
+                                    <td>{$val['Type']}</td>                                    
+                                    <td>{$val['Comment']}</td>                                    
+                                </tr>";
+                        }
+                        ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Stt</th>
+                            <th>Username</th>
+                            <th>Type</th>
+                            <th>Comment</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+<!--<script src="../../public/plugins/jquery/jquery.min.js"></script>-->
+<script>
+    $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+
+        });
+    });
+</script>
+

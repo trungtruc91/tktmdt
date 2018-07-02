@@ -3,6 +3,22 @@
     margin:0px;
 }
 
+.user.text-0 {
+    margin-bottom: 15px;
+}
+.load-comment,.save-user{
+    float: right;
+}
+
+.dis-inblock{
+    display: inline-block;
+}
+
+.question.dis-inblock.bg-white.p-lr-15.p-tb-5.text-14.ver-top {
+    border-radius: 15px;
+    padding: 5px 12px;
+    background: #ecdddd !important;
+}
 .card.card-primary.card-outline.card-profile {
     height: 98%;
 }
@@ -54,7 +70,7 @@ img.img-size-50 {
 }
 
 .card {
-     height: 105vh; 
+    height: 105vh;
 }
 
 .order {

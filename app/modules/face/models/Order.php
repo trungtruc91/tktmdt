@@ -1,36 +1,31 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: HAOHAO100
- * Date: 5/29/2018
- * Time: 11:54 PM
- */
+
 
 namespace Zs\Face\Models;
 
 
 use Zs\Library\Core\Db;
 
-class Ordered extends Db
+class Order extends Db
 {
-    public $_zcollection = "ordered";
-
-    public $collection = null;
-
-
-    public $_limit = 40;
-
-    public $_offset = 0;
-
-    public $_query = [];
-
-    public $_sort = -1;
-
-    public $_fieldSort = 'id';
-
+//    public $_zcollection = "Orders";
+//
+//    public $collection = null;
+//
+//
+//    public $_limit = 40;
+//
+//    public $_offset = 0;
+//
+//    public $_query = [];
+//
+//    public $_sort = -1;
+//
+//    public $_fieldSort = 'id';
     public function __construct()
     {
         parent::__construct();
+        $this->_zcollection='Orders';
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $this->collection = $this->setCollection($this->_zcollection);
     }
@@ -38,7 +33,7 @@ class Ordered extends Db
         return $this->collection->find();
     }
     public function getItemById($id){
-        $data=['userId'=>$id];
+        $data=['CustomerID'=>$id];
         return $this->collection->find($data);
     }
 
@@ -51,23 +46,23 @@ class Ordered extends Db
             "TotalServiceFee"=>$document['TotalServiceFee'],
             "ClientHubID"=>$document['ClientHubID']
         ];
-        $this->collection->updateOne(['id_create'=>(int)$filter],['$set'=>$data]);
+        $this->collection->updateOne(['OrderID'=>(int)$filter],['$set'=>$data]);
     }
     public function delete($filter){
 
-        $this->collection->deleteOne(['id_create'=>(int)$filter]);
+        $this->collection->deleteOne(['OrderID'=>(int)$filter]);
     }
 
     public function join($id){
         $data=[
             [
-                '$match'=>['id_create'=>(int)$id]
+                '$match'=>['OrderID'=>(int)$id]
             ],
             [
             '$lookup'=>[
-            'from'=>'order_create',
-            'localField'=>'id_create',
-            'foreignField'=>'id_create',
+            'from'=>'OrderInfo',
+            'localField'=>'OrderID',
+            'foreignField'=>'OrderID',
             'as'=>'info_ordered'
             ]
         ]

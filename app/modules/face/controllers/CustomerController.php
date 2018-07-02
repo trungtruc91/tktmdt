@@ -2,8 +2,9 @@
 
 namespace Zs\Face\Controllers;
 use Phalcon\Http\Request;
-use Zs\Face\Models\OrderCreate;
-use Zs\Face\Models\Ordered;
+use Zs\Face\Models\Customers;
+use Zs\Face\Models\OrderInfo;
+use Zs\Face\Models\Order;
 use Zs\Face\Models\User;
 
 class CustomerController extends LoginController
@@ -22,9 +23,10 @@ class CustomerController extends LoginController
     public function submitOrderAction()
     {
         $params = $this->_request->get();
-        $query = new User();
-        $qrOrder = new OrderCreate();
-        $dataUser = $query->getItemById($_SESSION['userData']['id'])->toArray()[0];
+        $qrUser = new User();
+        $orderInfo = new OrderInfo();
+        $qrCustomer=new Customers();
+        $dataUser = $qrUser->getItemById($_SESSION['userData']['id'])->toArray()[0];
         $idCreate = time();
         foreach ($params['data'] as $value) {
             $name = $value['name'];
@@ -32,9 +34,9 @@ class CustomerController extends LoginController
         }
 
         $data = [
-            "id_customer" => $dataCustomer['id_customer'],
-            "code_province" => $dataCustomer['province'],
-            "id_create" => $idCreate,
+//            "id_customer" => $dataCustomer['id_customer'],
+//            "code_province" => $dataCustomer['province'],
+//            "id_create" => $idCreate,
             "token" => $this->_token_ghn,
             "PaymentTypeID" => (int)$dataCustomer['PaymentTypeID'],//người nhận trả tiền
             "FromDistrictID" => (int)$dataUser['district_code'],
@@ -76,20 +78,25 @@ class CustomerController extends LoginController
             "IsCreditCreate" => true
         ];
 
-        $qrOrder->save($data);
-        unset($data['id_customer']);
-        unset($data['id_create']);
-        unset($data['code_province']);
+
         $this->_client->setPost(json_encode($data));
         $response = $this->_client->createCurl($this->_url_createOrder);
         $dataResponse = json_decode($response, 1);
         if ($dataResponse['code'] == 1) {
-            $qr = new Ordered();
-            $dataResponse['data']['userId'] = $_SESSION['userData']['id'];
-            $dataResponse['data']['id_customer'] = $dataCustomer['id_customer'];
-            $dataResponse['data']['id_create'] = $idCreate;
-
+            $qr = new Order();
+//            $dataResponse['data']['userId'] = $_SESSION['userData']['id'];
+            $dataResponse['data']['CustomerID'] = $dataCustomer['id_customer'];
+//            $dataResponse['data']['id_create'] = $idCreate;
             $qr->save($dataResponse['data']);
+
+            $data['OrderInfoID']=$idCreate;
+            $data['OrderID']=$dataResponse['data']['OrderID'];
+            $data['ProvinceCode']=$dataCustomer['province'];
+            $orderInfo->save($data);
+        }
+        if(!empty($qrCustomer->getItemById($dataCustomer['id_customer']))){
+            $data['id_customer']=$dataCustomer['id_customer'];
+            $qrCustomer->save($data);
         }
         echo $response;
         $this->view->disable();

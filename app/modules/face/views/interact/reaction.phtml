@@ -1,60 +1,87 @@
+<?php
+$filterSelect=[
+        'comments'=>'Comment',
+        'likes'=>'Like'
+//        'reactions'=>'Reaction'
+]
+?>
+<div class="facebook-api">
+    <div class="width-700 p-lr-30">
+        <form class="m-t-30 m-btm-15 text-0" method="post">
 
-    <div class="facebook-api">
-        <div class="width-700 p-lr-30">
-            <form class="m-t-30 m-btm-15 text-0" method="post">
 
-<!--                <div class="form-group">-->
-<!--                    <label>Access Token</label>-->
-<!--                    <input type="text" name="form[txtToken]" class="form-control" placeholder="">-->
-<!--                </div>-->
+            <div class="card card-primary card-outline" style="height: auto">
+                <div class="card-header">
+                    <h3 class="card-title">Reaction</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <div class="form-group">
+                        <select name="form[slcReaction]" class="form-control custom-select">
+                            <?php
+                            foreach ($filterSelect as $key=>$value){
+                            ?>
+                                <option value="<?php echo $key?>" <?php echo (($key==$select)?'selected':'')?>><?php echo $value?></option>
+                            <?php }?>
 
-                <div class="form-group">
-                    <label>ID Post</label>
-                    <input type="text" name="form[txtId_post]" class="form-control" placeholder="365109010360289_783788151825704">
+                        </select>
+                    </div>
+                </div><!-- /.card-body -->
+                <div class="card-footer">
+                    <div class="btn-load">
+                        <button type="submit" class="btn btn-default dis-inblock load-comment ver-top">Load Comments
+                        </button>
+                    </div>
                 </div>
+            </div>
+        </form>
 
-                <div class="form-group">
-                    <label>Reaction</label>
-                    <select name="form[slcReaction]" class="form-control custom-select">
-                        <option value="comments">Comment</option>
-                        <option value="likes">Like</option>
-                        <option value="reactions">Reaction</option>
-                    </select>
-                </div>
+        <div class="card card-primary card-outline"
+             style="height: auto;border-top:unset;<?php echo((!isset($result[0])) ? 'display:none' : '') ?> ">
 
-                <div class="right-block link-actions text-14 dis-inblock ver-top">
-                    <button type="submit" class="btn btn-default dis-inblock ver-top">Load Comments</button>
-                </div>
-            </form>
-            <div class="panel-default panel">
-                <?php if(isset($result[0]) && !empty($result[0])){?>
-                <div class="panel-body">
-                    <?php foreach ($result as $value){
-                        foreach ($value as $val){
-                        ?>
-                    <div class="user text-0">
-                        <a href="https://fb.com/<?php echo ((!isset($val['type']))?$val['from']['id']:$val['id'])?>" class="dis-inblock m-r-10 avatar-link">
-                            <div class="avatar dis-inblock">
-                                <img src="//graph.facebook.com/<?php echo ((!isset($val['type']))?$val['from']['id']:$val['id']).'/picture'?>" class="img-circle" width="32" height="32">
-                            </div>
-                        </a>
+            <div class="card-body">
+                <div class="panel-default panel">
+                    <?php if (isset($result[0]) && !empty($result[0])) { ?>
+                        <div class="panel-body">
+                            <?php foreach ($result as $value) {
+                                foreach ($value as $val) {
+                                    ?>
+                                    <div class="user text-0">
+                                        <div class="type" style="display: none"><?php echo $select?></div>
+                                        <div class="PostID" style="display: none"><?php echo $postId?></div>
+                                        <a class="link-face" href="https://fb.com/<?php echo((isset($val['from']['id'])) ? $val['from']['id'] : $val['id']) ?>"
+                                           class="dis-inblock m-r-10 avatar-link">
+                                            <div class="avatar dis-inblock">
+                                                <img src="//graph.facebook.com/<?php echo ((isset($val['from']['id'])) ? $val['from']['id'] : $val['id']) . '/picture' ?>"
+                                                     class="img-circle" width="32" height="32">
+                                            </div>
+                                        </a>
 
-                        <div class="question dis-inblock bg-white p-lr-15 p-tb-5 text-14 ver-top">
-                            <a href="#" class="dis-inblock m-r-5">
-                                <span class="full-name text-w600"><?php echo ((!isset($val['type']))?$val['from']['name']:$val['name'])?></span>
-                            </a>
+                                        <div class="question dis-inblock bg-white p-lr-15 p-tb-5 text-14 ver-top">
+                                            <a href="#" class="dis-inblock m-r-5">
+                                                <span class="full-name text-w600"><?php echo((isset($val['from']['name'])) ? $val['from']['name'] : $val['name']) ?></span>
+                                            </a>
 
-                            <span class="text"><?php echo ((!isset($val['type']))?$val['message']:'')?></span>
+                                            <span class="text"><?php echo((isset($val['message'])) ? $val['message'] : '') ?></span>
+
+                                        </div>
+
+                                    </div>
+                                <?php }
+                            } ?>
 
                         </div>
-
-                    </div>
-                    <?php }}?>
-
+                    <?php } ?>
                 </div>
-                <?php }?>
-            </div>
+            </div><!-- /.card-body -->
 
+            <div class="card-footer">
+                <div class="btn-save">
+                    <button type="submit" class="btn btn-default dis-inblock save-user ver-top">Save</button>
+                </div>
+            </div>
         </div>
+
+
     </div>
+</div>
 

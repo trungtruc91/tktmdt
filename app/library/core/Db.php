@@ -4,8 +4,14 @@ namespace Zs\Library\Core;
 class Db extends \MongoDB\Client
 {
     public $_zdb = '';
-
     public $_database = null;
+    public $_zcollection = '';
+    public $collection = null;
+    public $_limit = 40;
+    public $_offset = 0;
+    public $_query = [];
+    public $_sort = -1;
+    public $_fieldSort = '';
 
     public function __construct($uri = 'mongodb://127.0.0.1/', array $uriOptions = [], array $driverOptions = [])
     {

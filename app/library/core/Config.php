@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: HAOHAO100
- * Date: 5/15/2018
- * Time: 10:36 PM
- */
+
 
 namespace Zs\Library\Core;
 

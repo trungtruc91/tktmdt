@@ -11,26 +11,27 @@ namespace Zs\Face\Models;
 
 use Zs\Library\Core\Db;
 
-class OrderCreate extends Db
+class OrderInfo extends Db
 {
-    public $_zcollection = "order_create";
-
-    public $collection = null;
-
-
-    public $_limit = 40;
-
-    public $_offset = 0;
-
-    public $_query = [];
-
-    public $_sort = -1;
-
-    public $_fieldSort = 'id';
+//    public $_zcollection = "OrderInfo";
+//
+//    public $collection = null;
+//
+//
+//    public $_limit = 40;
+//
+//    public $_offset = 0;
+//
+//    public $_query = [];
+//
+//    public $_sort = -1;
+//
+//    public $_fieldSort = 'id';
 
     public function __construct()
     {
         parent::__construct();
+        $this->_zcollection = "OrderInfo";
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $this->collection = $this->setCollection($this->_zcollection);
     }
@@ -39,7 +40,7 @@ class OrderCreate extends Db
     }
     public function update($document){
         $dataUpdate=[
-            "code_province"=>$document['province'],
+            "ProvinceCode"=>$document['province'],
             "PaymentTypeID" => (int)$document['PaymentTypeID'],//người nhận trả tiền
             "ToDistrictID" => (int)$document['district'],
             "ToWardCode" => $document['wards'],
@@ -57,10 +58,11 @@ class OrderCreate extends Db
             "Height" => (float)$document['height'],
         ];
 
-        $this->collection->updateOne(['id_create'=>(int)$document['ID_create']],['$set'=>$dataUpdate]);
+        $this->collection->updateOne(['OrderID'=>(int)$document['ID_create']],['$set'=>$dataUpdate]);
     }
     public function delete($filter){
 
        $this->collection->deleteOne(['id_create'=>(int)$filter]);
     }
+
 }

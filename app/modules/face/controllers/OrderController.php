@@ -9,8 +9,10 @@
 namespace Zs\Face\Controllers;
 
 use Phalcon\Http\Request;
-use Zs\Face\Models\OrderCreate;
-use Zs\Face\Models\Ordered;
+use Zs\Face\Models\Customers;
+use Zs\Face\Models\OrderInfo;
+use Zs\Face\Models\Order;
+use Zs\Face\Models\User;
 
 class OrderController extends LoginController
 {
@@ -25,13 +27,15 @@ class OrderController extends LoginController
         }
         $this->_access = $_SESSION['access_token'];
     }
-    public function cancelOrderAction(){
-        $params=$this->_request->get();
-        $response=$this->getCancelOrder($this->_url_cancelOrder,$this->_token_ghn,$params['orderCode']);
 
-        if($response['code']==1){
-            $qrOrdered=new Ordered();
-            $qrOrderCreate=new OrderCreate();
+    public function cancelOrderAction()
+    {
+        $params = $this->_request->get();
+        $response = $this->getCancelOrder($this->_url_cancelOrder, $this->_token_ghn, $params['orderCode']);
+
+        if ($response['code'] == 1) {
+            $qrOrdered = new Order();
+            $qrOrderCreate = new OrderInfo();
             $qrOrdered->delete($params['id_create']);
             $qrOrderCreate->delete($params['id_create']);
         }
@@ -39,11 +43,23 @@ class OrderController extends LoginController
         $this->view->disable();
     }
 
-    public function orderedAction()
+    public function indexAction()
     {
-        $qrOrdered = new Ordered();
-        $dtOrder = $qrOrdered->getItemById($_SESSION['userData']['id'])->toArray();
+        $qrOrdered = new Customers();
+        $dtOrder = $qrOrdered->getAll()->toArray();
         $this->view->result = $dtOrder;
+    }
+
+    public function orderListAction()
+    {
+        $params = $this->_request->get();
+        if (isset($params['id'])) {
+            $qrOrdered = new Order();
+            $dtOrder = $qrOrdered->getItemById($params['id'])->toArray();
+            $this->view->result = $dtOrder;
+        }
+
+
     }
 
     public function updateOrderAction()
@@ -51,24 +67,100 @@ class OrderController extends LoginController
         $params = $this->_request->get();
 
         if (isset($params['id_order'])) {
+
             $id_order = $params['id_order'];
-            $query = new Ordered();
+            $query = new Order();
             $data = $query->join($id_order);
             foreach ($data as $val) {
                 $dtNew[] = $val;
             }
+
             $dtService = $this->getService($this->_url_findServiceAvailable, $this->_token_ghn, $this->jsonParse($dtNew)[0]['info_ordered'][0]);
+
             $dis = $this->getDistrict($this->_url_district, $this->_token_ghn)['data'];
             $wards = $this->getDistrict($this->_url_wards, $this->_token_ghn)['data'];
             foreach ($dis as $value) {
                 $province[$value['ProvinceID']] = $value['ProvinceName'];
             }
+
             $this->view->service = $dtService;
             $this->view->wards = $wards;
             $this->view->district = $dis;
             $this->view->allProvince = array_unique($province);
             $this->view->result = $this->jsonParse($dtNew);
+
         }
+    }
+
+    public function submitUpdateOrderAction()
+    {
+        $params = $this->_request->get();
+        $query = new User();
+        $qrOrder = new OrderInfo();
+        $dataUser = $query->getItemById($_SESSION['userData']['id'])->toArray()[0];
+        foreach ($params['data'] as $value) {
+            $name = $value['name'];
+            $dataCustomer[$name] = $value['value'];
+        }
+
+        $data = [
+            "ShippingOrderID" => (int)$dataCustomer['OrderID'],
+            "OrderCode" => $dataCustomer['OrderCode'],
+            "code_province" => $dataCustomer['province'],
+            "token" => $this->_token_ghn,
+            "PaymentTypeID" => (int)$dataCustomer['PaymentTypeID'],//ngu?i nh?n tr? ti?n
+            "FromDistrictID" => (int)$dataUser['district_code'],
+            "FromWardCode" => $dataUser['wards_code'],
+            "ToDistrictID" => (int)$dataCustomer['district'],
+            "ToWardCode" => $dataCustomer['wards'],
+            "Note" => $dataCustomer['txtNote'],
+            "SealCode" => "tem niêm phong",
+            "ExternalCode" => "",
+            "ClientContactName" => $dataUser['full_name'],
+            "ClientContactPhone" => $dataUser['number_phone'],
+            "ClientAddress" => $dataUser['address'],
+            "CustomerName" => $dataCustomer['name'],
+            "CustomerPhone" => $dataCustomer['sdt'],
+            "ShippingAddress" => $dataCustomer['shipping'],
+            "CoDAmount" => (int)$dataCustomer['amount'],
+            "NoteCode" => $dataCustomer['NoteCode'],
+            "InsuranceFee" => 0,
+            "ClientHubID" => 0,
+            "ServiceID" => (int)$dataCustomer['ServiceID'],
+            "Content" => "Test nội dung",
+            "CouponCode" => $dataCustomer['coupon'],
+            "Weight" => (float)$dataCustomer['size'],
+            "Length" => (float)$dataCustomer['long'],
+            "Width" => (float)$dataCustomer['width'],
+            "Height" => (float)$dataCustomer['height'],
+            "CheckMainBankAccount" => false,
+//            "ShippingOrderCosts" =>
+//                [
+//                    [
+//                        "ServiceID" => 53332
+//                    ]
+//                ],
+            "ReturnContactName" => "huy",
+            "ReturnContactPhone" => "",
+            "ReturnAddress" => "",
+            "ReturnDistrictCode" => "",
+            "ExternalReturnCode" => "",
+            "IsCreditCreate" => true
+        ];
+
+
+        $this->_client->setPost(json_encode($data));
+        $response = $this->_client->createCurl($this->_url_updateOrder);
+        $dataResponse = json_decode($response, 1);
+
+        if ($dataResponse['code'] == 1) {
+            $qrOrder->update($dataCustomer);
+            $qr = new Order();
+            $qr->update($dataCustomer['ID_create'], $dataResponse['data']);
+        }
+        echo $response;
+        $this->view->disable();
+
     }
 
     private function getService($url, $token, $arrParams = [])
@@ -96,6 +188,21 @@ class OrderController extends LoginController
         ];
         $this->_client->setPost(json_encode($data));
         $response = json_decode($this->_client->createCurl($url), 1);
+        return $response;
+    }
+
+    private function jsonParse($data)
+    {
+        $d = json_encode($data);
+        return json_decode($d, 1);
+    }
+
+    private function getDistrict($url, $token)
+    {
+        $data = ['Token' => $token];
+        $this->_client->setPost(json_encode($data));
+        $response = json_decode($this->_client->createCurl($url), 1);
+
         return $response;
     }
 }

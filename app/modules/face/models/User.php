@@ -7,24 +7,25 @@ use Zs\Library\Core\Db;
 
 class User extends Db
 {
-    public $_zcollection = "user_face";
-
-    public $collection = null;
-
-
-    public $_limit = 40;
-
-    public $_offset = 0;
-
-    public $_query = [];
-
-    public $_sort = -1;
-
-    public $_fieldSort = 'id';
+//    public $_zcollection = "User";
+//
+//    public $collection = null;
+//
+//
+//    public $_limit = 40;
+//
+//    public $_offset = 0;
+//
+//    public $_query = [];
+//
+//    public $_sort = -1;
+//
+//    public $_fieldSort = 'id';
 
     public function __construct()
     {
         parent::__construct();
+        $this->_zcollection="User";
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $this->collection = $this->setCollection($this->_zcollection);
     }
