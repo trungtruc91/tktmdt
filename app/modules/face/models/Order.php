@@ -38,6 +38,7 @@ class Order extends Db
     }
 
     public function save($document){
+
         $this->collection->insertOne($document);
     }
     public function update($filter,$document){

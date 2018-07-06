@@ -47,18 +47,29 @@ class Db extends \MongoDB\Client
         }
     }
 
-    public function createId($type = 'auto', $options = [])
+    public function createId( $options = [])
     {
         $cursor = $this->collection->findOne(
             $options,
             [
                 'limit' => 1,
-                'sort' => ['id' => -1],
+                'sort' => ['CustomerID' => -1],
             ]
         );
-        $newID = isset($cursor->id) ? $cursor->id + 1 : 1;
+
+        $newID = isset($cursor->CustomerID) ? $cursor->CustomerID . $this->generateRandomString(4) : $this->generateRandomString(1);
 
         return $newID;
+    }
+
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     public function filter($data = [], $name = '', $default = '', $types = [])

@@ -14,8 +14,10 @@ class Customers extends Db
         $this->collection = $this->setCollection($this->_zcollection);
     }
     public function save($document){
+
         $data=[
           'CustomerID'=>$document['id_customer'],
+          'UserID'=>$document['user_id'],
           'Name'=>$document['CustomerName'],
             'NumberPhone'=>$document['CustomerPhone'],
             'Address'=>$document['ShippingAddress'],
@@ -34,9 +36,9 @@ class Customers extends Db
         $this->collection->deleteOne(['id_create'=>(int)$filter]);
     }
     public function getItemById($id){
-        return $this->collection->find(['id_user'=>$id]);
+        return $this->collection->find(['CustomerID'=>$id]);
     }
-    public function getAll(){
-        return $this->collection->find();
+    public function getAll($option=[]){
+        return $this->collection->find($option);
     }
 }

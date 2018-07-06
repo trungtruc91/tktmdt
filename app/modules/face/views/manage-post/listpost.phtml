@@ -9,7 +9,7 @@
         <div class="col-12">
             <div class="card " style="height: auto">
                 <div class="card-header">
-                    <h3 class="card-title">Đơn hàng</h3>
+                    <h3 class="card-title">Posts</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body" >
@@ -26,7 +26,7 @@
                             ++$key;
                             echo "<tr>
                                     <td>{$key}</td>
-                                    <td><a href='/face/manage-post/listmember?PostID={$val['PostID']}&access_token={$token}'>{$val['Caption']}</a></td>                                    
+                                    <td><a href='/manage-post/listmember?PostID={$val['PostID']}&access_token={$token}'>{$val['Caption']}</a></td>                                    
                                 </tr>";
                         }
                         ?>

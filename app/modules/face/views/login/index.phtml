@@ -1,5 +1,5 @@
 <?php
-$redirect="http://tructt.laptrinhaz.com/face/login/facecallback";
+$redirect="http://tructt.laptrinhaz.com/login/facecallback";
 $permission=['email',
 'user_posts',
 'user_managed_groups',
@@ -13,7 +13,10 @@ $permission=['email',
 'manage_pages',
 'pages_show_list',
 'pages_messaging',
-    'read_page_mailboxes'
+    'read_page_mailboxes',
+    'publish_pages',
+    'publish_to_groups'
+
 ];
 $loginURL = $helper->getLoginUrl($redirect, $permission);
 ?>

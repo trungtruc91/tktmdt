@@ -1,5 +1,5 @@
 <div class="list-page">
-    <div class="card">
+    <div class="card" style="height: auto">
         <div class="card-header">
             <h3 class="card-title" style="text-align: center">Select page</h3>
 
@@ -17,7 +17,7 @@
                             <a href="#" class="product-title"
                                data-convId="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></a>
                         </div>
-                        <button type="button" class="btn btn-success"><a href="<?php echo '/face/customer/conversation?id_page='.$value['id'].'&access_token='.$value['access_token']?>">Select</a></button>
+                        <button type="button" class="btn btn-success"><a href="<?php echo '/customer/conversation?id_page='.$value['id'].'&access_token='.$value['access_token']?>">Select</a></button>
                     </li>
                 <?php } ?>
             </ul>

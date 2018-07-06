@@ -33,9 +33,11 @@ class IndexController extends LoginController
 //        $this->_client = new WebClient("https://google.com");
         $this->_request = new Request();
         if (!isset($_SESSION['userData'])) {
-            $this->response->redirect('http://tructt.laptrinhaz.com/face/login/index');
+            $this->response->redirect('/login.html');
         }
         $this->_access = $_SESSION['access_token'];
+        $this->view->titlePage='Profile';
+
     }
 
 

@@ -1,15 +1,11 @@
-<?php
-//echo "<pre>";
-//print_r($result);
-//echo "</pre>";die;
-?>
+
 <!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-12">
             <div class="card " style="height: auto">
                 <div class="card-header">
-                    <h3 class="card-title">Members</h3>
+                    <h3 class="card-title">Posts</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body" >
@@ -17,9 +13,7 @@
                         <thead>
                         <tr>
                             <th>Stt</th>
-                            <th>Username</th>
-                            <th>Type</th>
-                            <th>Comment</th>
+                            <th>Caption</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -28,9 +22,7 @@
                             ++$key;
                             echo "<tr>
                                     <td>{$key}</td>
-                                    <td><a target='_blank' href='https://fb.com/{$val['MemberID']}'>{$val['Username']}</a></td>                                    
-                                    <td>{$val['Type']}</td>                                    
-                                    <td>{$val['Comment']}</td>                                    
+                                    <td><a href='/interact/reaction?PostID={$val['PostID']}&access_token={$token}'>{$val['Caption']}</a></td>                                    
                                 </tr>";
                         }
                         ?>
@@ -38,9 +30,8 @@
                         <tfoot>
                         <tr>
                             <th>Stt</th>
-                            <th>Username</th>
-                            <th>Type</th>
-                            <th>Comment</th>
+                            <th>Caption</th>
+
                         </tr>
                         </tfoot>
                     </table>

@@ -35,6 +35,7 @@ class LoginController extends Controller
         ];
         $this->FB = new face($arr);
 
+
     }
 
     public function indexAction()
@@ -42,12 +43,17 @@ class LoginController extends Controller
         $face = $this->FB;
         $this->view->helper = $face->getRedirectLoginHelper();
         if (isset($_SESSION['userData']['id'])) {
-            $this->response->redirect("/face/index/profile");
+            $this->response->redirect("/profile.html");
         } else {
             $this->view->setMainView('login/index');
         }
     }
-
+    public function logoutAction(){
+        if (isset($_SESSION['userData'])) {
+            unset($_SESSION['userData']);
+        }
+        $this->response->redirect('/login.html');
+    }
     public function faceCallBackAction()
     {
         $query = new User();
@@ -55,14 +61,14 @@ class LoginController extends Controller
         $helper = $face->getRedirectLoginHelper();
         $_SESSION['FBRLH_state'] = $_GET['state'];
         try {
-            $accessToken = $helper->getAccessToken("http://tructt.laptrinhaz.com/face/login/facecallback");
+            $accessToken = $helper->getAccessToken("http://tructt.laptrinhaz.com/login/facecallback");
         } catch (Facebook\Exceptions\FacebookResponseException $e) {
             echo "Reponse Exception:" . $e->getMessage();
         } catch (Facebook\Exceptions\FacebookSDKException $e) {
             echo "SDK Exception" . $e->getMessage();
         }
         if (!$accessToken) {
-            $this->response->redirect("/face/index/login");
+            $this->response->redirect("/login.html");
         }
         $oAuth2Client = $this->FB->getOAuth2Client();
 
@@ -77,12 +83,12 @@ class LoginController extends Controller
         if (empty($profileUser)) {
             $query->save($userData);
         } else {
-            $_SESSION['userData']['DistrictID'] = $profileUser[0]['district_code'];
+            $_SESSION['userData']['DistrictID'] = $profileUser[0]['DistrictCode'];
         }
         $this->savePage($accessToken,$userData['id']);
         $_SESSION['access_token'] = (string)$accessToken;
 
-        $this->response->redirect("/face/index/profile");
+        $this->response->redirect("/profile.html");
     }
 
     private function savePage($accessToken,$userID)

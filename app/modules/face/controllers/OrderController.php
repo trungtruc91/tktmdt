@@ -23,36 +23,42 @@ class OrderController extends LoginController
 //        $this->_client = new WebClient("https://google.com");
         $this->_request = new Request();
         if (!isset($_SESSION['userData'])) {
-            $this->response->redirect('http://tructt.laptrinhaz.com/face/login/index');
+            $this->response->redirect('/login.html');
         }
         $this->_access = $_SESSION['access_token'];
+        $this->view->titlePage='Orders';
+
     }
 
     public function cancelOrderAction()
     {
         $params = $this->_request->get();
-        $response = $this->getCancelOrder($this->_url_cancelOrder, $this->_token_ghn, $params['orderCode']);
+        if(isset($params['order_id'])) {
+            $response = $this->getCancelOrder($this->_url_cancelOrder, $this->_token_ghn, $params['orderCode']);
 
-        if ($response['code'] == 1) {
-            $qrOrdered = new Order();
-            $qrOrderCreate = new OrderInfo();
-            $qrOrdered->delete($params['id_create']);
-            $qrOrderCreate->delete($params['id_create']);
+            if ($response['code'] == 1) {
+                $qrOrdered = new Order();
+                $qrOrderCreate = new OrderInfo();
+                $qrOrdered->delete((int)$params['order_id']);
+                $qrOrderCreate->delete((int)$params['order_id']);
+            }
+            echo json_encode($response);
+
         }
-        echo json_encode($response);
         $this->view->disable();
     }
 
     public function indexAction()
     {
         $qrOrdered = new Customers();
-        $dtOrder = $qrOrdered->getAll()->toArray();
+        $dtOrder = $qrOrdered->getAll(['UserID'=>$_SESSION['userData']['id']])->toArray();
         $this->view->result = $dtOrder;
     }
 
     public function orderListAction()
     {
         $params = $this->_request->get();
+
         if (isset($params['id'])) {
             $qrOrdered = new Order();
             $dtOrder = $qrOrdered->getItemById($params['id'])->toArray();
@@ -92,6 +98,22 @@ class OrderController extends LoginController
         }
     }
 
+    public function createOrderAction()
+    {
+        $dis = $this->getDistrict($this->_url_district, $this->_token_ghn)['data'];
+        $wards = $this->getDistrict($this->_url_wards, $this->_token_ghn)['data'];
+        foreach ($dis as $value) {
+            $province[$value['ProvinceID']] = $value['ProvinceName'];
+        }
+
+        $this->view->service = $dtService;
+        $this->view->wards = $wards;
+        $this->view->district = $dis;
+        $this->view->allProvince = array_unique($province);
+        $this->view->result = $this->jsonParse($dtNew);
+
+    }
+
     public function submitUpdateOrderAction()
     {
         $params = $this->_request->get();
@@ -109,16 +131,16 @@ class OrderController extends LoginController
             "code_province" => $dataCustomer['province'],
             "token" => $this->_token_ghn,
             "PaymentTypeID" => (int)$dataCustomer['PaymentTypeID'],//ngu?i nh?n tr? ti?n
-            "FromDistrictID" => (int)$dataUser['district_code'],
-            "FromWardCode" => $dataUser['wards_code'],
+            "FromDistrictID" => (int)$dataUser['DistrictCode'],
+            "FromWardCode" => $dataUser['WardCode'],
             "ToDistrictID" => (int)$dataCustomer['district'],
             "ToWardCode" => $dataCustomer['wards'],
             "Note" => $dataCustomer['txtNote'],
             "SealCode" => "tem niêm phong",
             "ExternalCode" => "",
-            "ClientContactName" => $dataUser['full_name'],
-            "ClientContactPhone" => $dataUser['number_phone'],
-            "ClientAddress" => $dataUser['address'],
+            "ClientContactName" => $dataUser['FullName'],
+            "ClientContactPhone" => $dataUser['PhoneNumber'],
+            "ClientAddress" => $dataUser['Address'],
             "CustomerName" => $dataCustomer['name'],
             "CustomerPhone" => $dataCustomer['sdt'],
             "ShippingAddress" => $dataCustomer['shipping'],

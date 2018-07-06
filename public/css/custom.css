@@ -3,22 +3,37 @@
     margin: 0px;
 }
 
-select.form-control.custom-select {
-    height: 25% !important;
-    width: 22%;
+.username-face {
+    border-bottom: 1px solid gray;
+    padding: 0px 5px;
 }
-.btn-facebook {
-    background: #3B5998;
-    border-radius: 0;
-    color: #fff;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #263961;
+
+.btn-logout a {
+    color: white;
 }
-.btn-facebook:link, .btn-facebook:visited {
-    color: #fff;
+
+button.btn.btn-block.btn-logout.btn-primary.disabled {
+    /* display: inline-block; */
+    width: 100%;
+    /* margin: 3% -11%; */
+    background: #7fff0000;
+    margin-bottom: 6%;
+    cursor: pointer;
 }
-.btn-facebook:active, .btn-facebook:hover {
-    background: #263961;
-    color: #fff;
+
+a.brand-link.custom-a {
+    display: inline-block;
+    border-bottom: unset;
+    margin-left: 10%;
 }
+
+button.btn.btn-block.btn-outline-secondary.custom-btn-add {
+    width: 10%;
+    float: right;
+}
+
+h3.card-title.custom-card-order {
+    display: inline-block;
+    padding-top: 5px;
+}
+

@@ -15,10 +15,13 @@ class CustomerController extends LoginController
         session_start();
 //        $this->_client = new WebClient("https://google.com");
         $this->_request = new Request();
-        if (!isset($_SESSION['userData'])) {
-            $this->response->redirect('http://tructt.laptrinhaz.com/face/login/index');
-        }
+
         $this->_access = $_SESSION['access_token'];
+        if (!isset($_SESSION['userData'])) {
+            $this->response->redirect('/login.html');
+        }
+        $this->view->titlePage='Manage Customer';
+
     }
     public function submitOrderAction()
     {
@@ -32,23 +35,23 @@ class CustomerController extends LoginController
             $name = $value['name'];
             $dataCustomer[$name] = $value['value'];
         }
-
+        $CustomerId=((empty($dataCustomer['id_customer']))?$this->generateRandomString(4):$dataCustomer['id_customer']);
         $data = [
 //            "id_customer" => $dataCustomer['id_customer'],
 //            "code_province" => $dataCustomer['province'],
 //            "id_create" => $idCreate,
             "token" => $this->_token_ghn,
             "PaymentTypeID" => (int)$dataCustomer['PaymentTypeID'],//người nhận trả tiền
-            "FromDistrictID" => (int)$dataUser['district_code'],
-            "FromWardCode" => $dataUser['wards_code'],
+            "FromDistrictID" => (int)$dataUser['DistrictCode'],
+            "FromWardCode" => $dataUser['WardCode'],
             "ToDistrictID" => (int)$dataCustomer['district'],
             "ToWardCode" => $dataCustomer['wards'],
             "Note" => $dataCustomer['txtNote'],
             "SealCode" => "tem niêm phong",
             "ExternalCode" => "",
-            "ClientContactName" => $dataUser['full_name'],
-            "ClientContactPhone" => $dataUser['number_phone'],
-            "ClientAddress" => $dataUser['address'],
+            "ClientContactName" => $dataUser['FullName'],
+            "ClientContactPhone" => $dataUser['PhoneNumber'],
+            "ClientAddress" => $dataUser['Address'],
             "CustomerName" => $dataCustomer['name'],
             "CustomerPhone" => $dataCustomer['sdt'],
             "ShippingAddress" => $dataCustomer['shipping'],
@@ -84,18 +87,16 @@ class CustomerController extends LoginController
         $dataResponse = json_decode($response, 1);
         if ($dataResponse['code'] == 1) {
             $qr = new Order();
-//            $dataResponse['data']['userId'] = $_SESSION['userData']['id'];
-            $dataResponse['data']['CustomerID'] = $dataCustomer['id_customer'];
-//            $dataResponse['data']['id_create'] = $idCreate;
+            $dataResponse['data']['CustomerID'] = $CustomerId;
             $qr->save($dataResponse['data']);
-
             $data['OrderInfoID']=$idCreate;
             $data['OrderID']=$dataResponse['data']['OrderID'];
             $data['ProvinceCode']=$dataCustomer['province'];
             $orderInfo->save($data);
         }
-        if(!empty($qrCustomer->getItemById($dataCustomer['id_customer']))){
-            $data['id_customer']=$dataCustomer['id_customer'];
+        if(empty($qrCustomer->getItemById($CustomerId)->toArray())){
+            $data['id_customer']=$CustomerId;
+            $data['user_id']=$_SESSION['userData']['id'];
             $qrCustomer->save($data);
         }
         echo $response;
@@ -158,8 +159,6 @@ class CustomerController extends LoginController
         if (isset($params['id_page'])) {
             $qr = new User();
             $dataUser = $qr->getItemById($_SESSION['userData']['id'])->toArray();
-
-//            $_SESSION['userData']['DistrictID']=$dataUser[0]['district_code'];
             $dis = $this->getDistrict($this->_url_district, $this->_token_ghn)['data'];
             $wards = $this->getDistrict($this->_url_wards, $this->_token_ghn)['data'];
             foreach ($dis as $value) {
@@ -343,6 +342,16 @@ class CustomerController extends LoginController
         $response = json_decode($this->_client->createCurl($url), 1);
 
         return $response;
+    }
+
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return 't_'.$randomString;
     }
 
 

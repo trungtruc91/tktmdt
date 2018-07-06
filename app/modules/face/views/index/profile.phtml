@@ -13,7 +13,7 @@
                                  alt="User profile picture">
                         </div>
 
-                        <h3 class="profile-username text-center"><?php echo $_SESSION['userData']['last_name'].$_SESSION['userData']['first_name']?></h3>
+                        <h3 class="profile-username text-center"><?php echo $_SESSION['userData']['LastName'].$_SESSION['userData']['FirstName']?></h3>
 
                         <p class="text-muted text-center">Người bán hàng</p>
 
@@ -54,25 +54,25 @@
                                 <form class="form-horizontal" action="#" method="post">
                                     <div class="form-group">
                                         <label>Tên người bán hàng</label>
-                                        <input type="text" name="form[name]" class="form-control name-order" value="<?php echo $data['full_name']?>"  placeholder="Enter ...">
+                                        <input type="text" name="form[name]" class="form-control name-order" value="<?php echo $data['FullName']?>"  placeholder="Enter ...">
                                     </div>
                                     <div class="form-group">
                                         <label>Số điện thoại</label>
-                                        <input type="text" name="form[sdt]" class="form-control" value="<?php echo $data['number_phone']?>" placeholder="Enter ...">
+                                        <input type="text" name="form[sdt]" class="form-control" value="<?php echo $data['PhoneNumber']?>" placeholder="Enter ...">
                                     </div>
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="text" name="form[email]" class="form-control" value="<?php echo $data['email']?>" placeholder="Enter ...">
+                                        <input type="text" name="form[email]" class="form-control" value="<?php echo $data['Email']?>" placeholder="Enter ...">
                                     </div>
                                     <div class="form-group">
                                         <label>Địa chỉ</label>
-                                        <input type="text" name="form[address]" class="form-control" value="<?php echo $data['address']?>" placeholder="Enter ...">
+                                        <input type="text" name="form[address]" class="form-control" value="<?php echo $data['Address']?>" placeholder="Enter ...">
                                     </div>
                                     <div class="form-group">
                                         <label>Tỉnh/thành</label>
                                         <select class="form-control slt-province" name="form[province]">
                                             <?php foreach ($allProvince as $key=> $val){?>
-                                                <option value="<?php echo $key?>" <?php echo (($key==$data['province_code'])?'selected':'') ?>><?php echo $val?></option>
+                                                <option value="<?php echo $key?>" <?php echo (($key==$data['ProvinceCode'])?'selected':'') ?>><?php echo $val?></option>
                                             <?php }?>
 
                                         </select>
@@ -81,7 +81,7 @@
                                         <label>Quận/huyện</label>
                                         <select class="form-control slt-district" name="form[district]">
                                             <?php foreach ($district as $value){?>
-                                                <option <?php echo (($value['DistrictID']==$data['district_code'])?'selected':'') ?> value="<?php echo $value['DistrictID'] ?>"><?php echo $value['DistrictName']?></option>
+                                                <option <?php echo (($value['DistrictID']==$data['DistrictCode'])?'selected':'') ?> value="<?php echo $value['DistrictID'] ?>"><?php echo $value['DistrictName']?></option>
                                             <?php }?>
                                         </select>
                                     </div>
@@ -89,7 +89,7 @@
                                         <label>Phường/xã</label>
                                         <select class="form-control slt-wards" name="form[wards]">
                                             <?php foreach ($wards['Wards'] as $v){?>
-                                                <option <?php echo (($v['WardCode']==$data['wards_code'])?'selected':'') ?> value="<?php echo $v['WardCode']?>"><?php echo $v['WardName']?></option>
+                                                <option <?php echo (($v['WardCode']==$data['WardCode'])?'selected':'') ?> value="<?php echo $v['WardCode']?>"><?php echo $v['WardName']?></option>
                                             <?php }?>
                                         </select>
                                     </div>

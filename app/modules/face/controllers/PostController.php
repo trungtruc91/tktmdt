@@ -15,12 +15,13 @@ class PostController extends LoginController
     {
         parent::initialize();
         session_start();
-//        $this->_client = new WebClient("https://google.com");
         $this->_request = new Request();
         if (!isset($_SESSION['userData'])) {
-            $this->response->redirect('http://tructt.laptrinhaz.com/face/login/index');
+            $this->response->redirect('/login.html');
         }
         $this->_access = $_SESSION['access_token'];
+        $this->view->titlePage='Post';
+
     }
 
     public function indexAction()
@@ -33,6 +34,7 @@ class PostController extends LoginController
                 $url = "https://graph.facebook.com/v2.12/{$params['id_page']}/photos";
                 $this->_client->setPost($data);
                 $response = $this->_client->createCurl($url);
+
                 $data = [
                     'PostID' => json_decode($response, 1)['post_id'],
                     'Caption' => $params['form']['txtCaption'],
@@ -43,7 +45,7 @@ class PostController extends LoginController
             }
             $this->view->result = json_decode($response, 1)['post_id'];
         }else{
-            $this->response->redirect('http://tructt.laptrinhaz.com/face/login/index');
+            $this->response->redirect('/login.html');
 
         }
 

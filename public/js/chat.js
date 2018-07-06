@@ -1,4 +1,4 @@
-var server_url = '/face';
+var server_url = '';
 
 
 $(function () {
@@ -39,9 +39,7 @@ $(function () {
         if(ckInput===0 && ckSelect===0) {
             if (dem === 1) {
                 var data = $("form :input").serializeArray();
-                console.log(data);
-                console.log(typeof typeSubmit);
-                if(typeof typeSubmit !== 'undefined'){
+                if(typeof typeSubmit !== 'undefined' && typeSubmit==='update'){
                     url='/order/submitupdateorder';
                 }else{
                     url='/customer/submitorder';
@@ -109,8 +107,8 @@ $(function () {
             "ToDistrictID": parseInt(idDistrict),
             "CouponCode": ""
         };
-        console.log(service);
         if(weight!==''&&long!==''&&width!==''&&height!==''&&idDistrict!==''){
+
             $('.service-radio, .label-service').remove();
             getScriptAjaxApi('https://console.ghn.vn/api/v1/apiv3/FindAvailableServices',"POST",JSON.stringify(service),function (response) {
                 console.log(response);
@@ -127,10 +125,9 @@ $(function () {
     $(".cancel-order").click(function () {
         var check=confirm("Bạn có chắc muốn hủy đơn hàng!");
         var order_code=$(this).data("order_code");
-        var id_create=$(this).data("id");
+        var order_id=$(this).data("id");
         if(check==1) {
-            getScriptAjax('/order/cancelorder', "GET", {orderCode: order_code,id_create:id_create}, function (response) {
-                console.log(response);
+            getScriptAjax('/order/cancelorder', "GET", {orderCode: order_code,order_id:order_id}, function (response) {
                 window.location.reload();
             });
         }
@@ -230,7 +227,6 @@ var getScriptAjax = function (url,method ,options, callback) {
         method: method,
         dataType: "json",
         cache: true,
-        // ifModified:true,
         error: function (response) {
 
             console.log(response);

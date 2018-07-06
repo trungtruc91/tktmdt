@@ -11,5 +11,40 @@ $router->add('/:module/:controller/:action(/)*',[
    'controller'=>2,
    'action'=>3
 ]);
+
+$router->add('/',[
+   'module'=>'face',
+   'controller'=>'login',
+   'action'=>'index'
+]);
+$router->add('/profile(.html)*',[
+   'module'=>'face',
+   'controller'=>'index',
+   'action'=>'profile'
+]);
+$router->add('/:controller/select-page(.html)*',[
+   'module'=>'face',
+   'controller'=>1,
+   'action'=>'selectpage'
+]);
+$router->add('/:controller/:action(/:params)*',[
+   'module'=>'face',
+   'controller'=>1,
+   'action'=>2,
+    'params'=>3,
+
+]);
+
+$router->add('/profile(.html)*',[
+   'module'=>'face',
+   'controller'=>'index',
+   'action'=>'profile'
+]);
+$router->add('/login(.html)*',[
+   'module'=>'face',
+   'controller'=>'login',
+   'action'=>'index'
+]);
+
 return $router;
 

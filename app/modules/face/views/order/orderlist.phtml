@@ -55,11 +55,11 @@
                                             break;
                                         case 'OrderCode':
 
-                                            echo "<td><a href='/face/order/updateorder?id_order={$val['OrderID']}'>$v</a></td>";
+                                            echo "<td><a href='/order/updateorder?id_order={$val['OrderID']}'>$v</a></td>";
                                             break;
                                         case 'Action':
 
-                                            echo "<td><button class='btn btn-danger cancel-order' data-order_code='{$val['OrderCode']}' data-id='{$val['id_create']}'>$v</button></td>";
+                                            echo "<td><button class='btn btn-danger cancel-order' data-order_code='{$val['OrderCode']}' data-id='{$val['OrderID']}'>$v</button></td>";
                                             break;
                                         default:
                                             echo "<td>$v</td>";

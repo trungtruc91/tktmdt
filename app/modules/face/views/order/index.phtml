@@ -1,15 +1,12 @@
-<?php
-//echo "<pre>";
-//print_r($result);
-//echo "</pre>";die;
-?>
+
 <!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-12">
             <div class="card " style="height: auto">
                 <div class="card-header">
-                    <h3 class="card-title">Đơn hàng</h3>
+                    <h3 class="card-title custom-card-order">Customers</h3>
+                    <button type="button" class="btn btn-block btn-outline-secondary custom-btn-add"><a href="/order/createorder"><i class="fa fa-plus-square" aria-hidden="true"></i> ADD NEW</a></button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body" >
@@ -28,7 +25,7 @@
                             ++$key;
                             echo "<tr>
                                     <td>{$key}</td>
-                                    <td><a href='/face/order/orderlist?id={$val['CustomerID']}'>{$val['Name']}</a></td>
+                                    <td><a href='/order/orderlist?id={$val['CustomerID']}'>{$val['Name']}</a></td>
                                     <td>{$val['Address']}</td>
                                     <td>{$val['NumberPhone']}</td>
                                 </tr>";

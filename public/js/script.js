@@ -7,10 +7,7 @@ $(function () {
             var MemberID=$(this).find('.link-face').attr('href').split('/').pop();
             var username=$(this).find('.full-name').text();
             var comment=$(this).find('.question .text').text();
-            // console.log(type);
-            // console.log(postId);
-            // console.log(username);
-            // console.log(comment);
+
             var document={
                 'TypeInteract':type,
                 'PostID':postId,
